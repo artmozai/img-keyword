@@ -32,17 +32,21 @@ const Index = () => {
     setIsLoading(true);
     try {
       // TODO: Implement Gemini API integration
-      // For now, we'll simulate the API call
+      // For now, we'll simulate the API call with 50 keywords
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setResults({
-        title: "A beautiful sunset over the mountains",
+        title: "A beautiful sunset over the mountains with vibrant colors",
         keywords: [
-          "sunset",
-          "mountains",
-          "nature",
-          "landscape",
-          "orange sky",
-          "peaceful",
+          "sunset", "mountains", "nature", "landscape", "orange sky",
+          "peaceful", "serene", "dusk", "twilight", "scenic",
+          "panorama", "outdoor", "wilderness", "tranquil", "majestic",
+          "peaks", "silhouette", "horizon", "evening", "dramatic",
+          "colorful", "atmospheric", "picturesque", "vista", "alpine",
+          "mountainscape", "natural beauty", "skyline", "golden hour", "ridge",
+          "mountain range", "outdoor photography", "scenic view", "panoramic", "mountainous",
+          "natural landscape", "mountain peak", "sunset colors", "mountain view", "sunset sky",
+          "mountain scenery", "sunset glow", "mountain sunset", "nature photography", "landscape photography",
+          "sunset scene", "mountain landscape", "scenic sunset", "natural wonder", "sunset vista"
         ],
       });
     } catch (error) {
@@ -64,7 +68,7 @@ const Index = () => {
             Image Analysis AI
           </h1>
           <p className="text-gray-600">
-            Upload an image to generate a title and keywords using AI
+            Upload an image to generate a title and 50 keywords using AI
           </p>
         </div>
 
