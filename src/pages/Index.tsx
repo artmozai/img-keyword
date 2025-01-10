@@ -34,7 +34,7 @@ const Index = () => {
     try {
       // Initialize Gemini API
       const genAI = new GoogleGenerativeAI(localStorage.getItem("GEMINI_API_KEY") || "");
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-vision" });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
       // Convert image to base64
       const imageData = await new Promise<string>((resolve) => {
