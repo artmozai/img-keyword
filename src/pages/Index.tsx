@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const Index = () => {
+const IndexPage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<{
@@ -124,4 +124,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default IndexPage;
