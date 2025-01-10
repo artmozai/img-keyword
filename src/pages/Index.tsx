@@ -4,6 +4,7 @@ import { Results } from "@/components/Results";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const Index = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -31,28 +32,54 @@ const Index = () => {
 
     setIsLoading(true);
     try {
-      // TODO: Implement Gemini API integration
-      // For now, we'll simulate the API call with 50 keywords
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Initialize Gemini API
+      const genAI = new GoogleGenerativeAI(localStorage.getItem("GEMINI_API_KEY") || "");
+      const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+
+      // Convert image to base64
+      const imageData = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(selectedImage);
+      });
+
+      // Prepare the image data for the API
+      const imageParts = [
+        {
+          inlineData: {
+            data: imageData.split(",")[1],
+            mimeType: selectedImage.type,
+          },
+        },
+      ];
+
+      // Generate content from the image
+      const result = await model.generateContent([
+        "Analyze this image and provide: 1. A descriptive title (about 10-15 words) 2. Generate exactly 50 relevant keywords or short phrases, separated by commas. Focus on visual elements, mood, style, and subject matter.",
+        ...imageParts,
+      ]);
+      const response = await result.response;
+      const text = response.text();
+
+      // Parse the response
+      const [title, keywordsText] = text.split("\n\n");
+      const cleanTitle = title.replace(/^(Title:|1\.|[0-9]\.)\s*/i, "").trim();
+      const keywords = keywordsText
+        .replace(/^(Keywords:|2\.|[0-9]\.)\s*/i, "")
+        .split(",")
+        .map((k) => k.trim())
+        .filter((k) => k)
+        .slice(0, 50);
+
       setResults({
-        title: "A beautiful sunset over the mountains with vibrant colors",
-        keywords: [
-          "sunset", "mountains", "nature", "landscape", "orange sky",
-          "peaceful", "serene", "dusk", "twilight", "scenic",
-          "panorama", "outdoor", "wilderness", "tranquil", "majestic",
-          "peaks", "silhouette", "horizon", "evening", "dramatic",
-          "colorful", "atmospheric", "picturesque", "vista", "alpine",
-          "mountainscape", "natural beauty", "skyline", "golden hour", "ridge",
-          "mountain range", "outdoor photography", "scenic view", "panoramic", "mountainous",
-          "natural landscape", "mountain peak", "sunset colors", "mountain view", "sunset sky",
-          "mountain scenery", "sunset glow", "mountain sunset", "nature photography", "landscape photography",
-          "sunset scene", "mountain landscape", "scenic sunset", "natural wonder", "sunset vista"
-        ],
+        title: cleanTitle,
+        keywords: keywords,
       });
     } catch (error) {
+      console.error("Error generating results:", error);
       toast({
         title: "Error",
-        description: "Failed to generate results. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to generate results. Please check your API key and try again.",
         variant: "destructive",
       });
     } finally {
