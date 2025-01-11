@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ImageUpload } from "@/components/ImageUpload";
 import { Results } from "@/components/Results";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -9,11 +10,25 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const Index = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState("");
   const [results, setResults] = useState<{
     title: string;
     keywords: string[];
   } | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem("GEMINI_API_KEY");
+    if (savedApiKey) {
+      setApiKey(savedApiKey);
+    }
+  }, []);
+
+  const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newApiKey = e.target.value;
+    setApiKey(newApiKey);
+    localStorage.setItem("GEMINI_API_KEY", newApiKey);
+  };
 
   const handleImageSelect = (file: File) => {
     setSelectedImage(file);
@@ -30,10 +45,18 @@ const Index = () => {
       return;
     }
 
+    if (!apiKey) {
+      toast({
+        title: "No API Key",
+        description: "Please enter your Gemini API key",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
-      // Initialize Gemini API
-      const genAI = new GoogleGenerativeAI(localStorage.getItem("GEMINI_API_KEY") || "");
+      const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
       // Convert image to base64
@@ -97,6 +120,22 @@ const Index = () => {
           <p className="text-gray-600">
             Upload an image to generate a title and 50 keywords using AI
           </p>
+        </div>
+
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="apiKey" className="text-sm font-medium text-gray-700">
+              Gemini API Key
+            </label>
+            <Input
+              id="apiKey"
+              type="password"
+              value={apiKey}
+              onChange={handleApiKeyChange}
+              placeholder="Enter your Gemini API key"
+              className="w-full"
+            />
+          </div>
         </div>
 
         <ImageUpload onImageSelect={handleImageSelect} isLoading={isLoading} />
