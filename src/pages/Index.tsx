@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Moon, Sun } from "lucide-react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/components/theme-provider";
 
 const Index = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
