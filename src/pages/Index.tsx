@@ -4,8 +4,9 @@ import { Results } from "@/components/Results";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Moon, Sun } from "lucide-react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { useTheme } from "next-themes";
 
 const Index = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -16,6 +17,7 @@ const Index = () => {
     keywords: string[];
   } | null>(null);
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     const savedApiKey = localStorage.getItem("GEMINI_API_KEY");
@@ -114,20 +116,35 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-background transition-colors duration-300">
       <div className="container max-w-4xl py-12 space-y-8">
+        <div className="flex justify-end mb-4">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="rounded-full"
+          >
+            {theme === "dark" ? (
+              <Sun className="h-5 w-5" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
+
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
             Image Analysis AI
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Upload an image to generate a title and 50 keywords using AI
           </p>
         </div>
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="apiKey" className="text-sm font-medium text-gray-700">
+            <label htmlFor="apiKey" className="text-sm font-medium">
               Gemini API Key
             </label>
             <Input
@@ -138,6 +155,14 @@ const Index = () => {
               placeholder="Enter your Gemini API key"
               className="w-full"
             />
+            <a
+              href="https://aistudio.google.com/apikey"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-primary hover:underline block mt-1"
+            >
+              Get your Gemini API key here
+            </a>
           </div>
         </div>
 
