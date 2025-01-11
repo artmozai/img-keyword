@@ -86,7 +86,10 @@ const Index = () => {
 
       // Parse the response
       const [title, keywordsText] = text.split("\n\n");
-      const cleanTitle = title.replace(/^(Title:|1\.|[0-9]\.)\s*/i, "").trim();
+      const cleanTitle = title
+        .replace(/^(Title:|1\.|[0-9]\.)\s*/i, "")
+        .replace(/\*\*/g, "")
+        .trim();
       const keywords = keywordsText
         .replace(/^(Keywords:|2\.|[0-9]\.)\s*/i, "")
         .split(",")
