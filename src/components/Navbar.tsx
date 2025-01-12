@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Moon, Sun, Search } from "lucide-react";
@@ -14,22 +14,6 @@ import {
 export function Navbar() {
   const { theme, setTheme } = useTheme();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-  useEffect(() => {
-    if (isSearchOpen) {
-      // Load Google CSE script
-      const script = document.createElement('script');
-      script.src = 'https://cse.google.com/cse.js?cx=651d1b956c0ff4371';
-      script.async = true;
-      document.head.appendChild(script);
-
-      // Create search element
-      const searchDiv = document.getElementById('google-search');
-      if (searchDiv) {
-        searchDiv.innerHTML = '<div class="gcse-search"></div>';
-      }
-    }
-  }, [isSearchOpen]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -96,7 +80,10 @@ export function Navbar() {
               Search across our content
             </DialogDescription>
           </DialogHeader>
-          <div id="google-search" className="min-h-[400px]" />
+          <div className="min-h-[400px]">
+            <script async src="https://cse.google.com/cse.js?cx=651d1b956c0ff4371"></script>
+            <div className="gcse-search"></div>
+          </div>
         </DialogContent>
       </Dialog>
     </header>
