@@ -10,10 +10,22 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Input } from "./ui/input";
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      const searchUrl = `https://artmozai.blogspot.com/search?q=${encodeURIComponent(searchQuery)}`;
+      window.open(searchUrl, '_blank');
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -80,8 +92,18 @@ export function Navbar() {
               Search across our content
             </DialogDescription>
           </DialogHeader>
-          <script async="async" src="https://cse.google.com/cse.js?cx=651d1b956c0ff4371"></script>
-          <div class="gcse-search"></div>
+          <form onSubmit={handleSearch} className="space-y-4">
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full"
+            />
+            <Button type="submit" className="w-full">
+              Search
+            </Button>
+          </form>
         </DialogContent>
       </Dialog>
     </header>
