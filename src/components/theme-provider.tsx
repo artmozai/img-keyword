@@ -15,7 +15,7 @@ type ThemeProviderState = {
 }
 
 const initialState: ThemeProviderState = {
-  theme: "system",
+  theme: "dark",
   setTheme: () => null,
 }
 
@@ -31,8 +31,8 @@ export function ThemeProvider({
   const [theme, setTheme] = useState<Theme>(() => {
     const storedTheme = localStorage.getItem(storageKey) as Theme | null
     if (!storedTheme) {
-      localStorage.setItem(storageKey, defaultTheme)
-      return defaultTheme
+      localStorage.setItem(storageKey, "dark")
+      return "dark"
     }
     return storedTheme
   })
