@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 
 export function Navbar() {
@@ -91,6 +92,9 @@ export function Navbar() {
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle>Search</DialogTitle>
+            <DialogDescription>
+              Search across our content
+            </DialogDescription>
           </DialogHeader>
           <div id="google-search" className="min-h-[400px]" />
         </DialogContent>
