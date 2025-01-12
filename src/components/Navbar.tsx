@@ -80,10 +80,8 @@ export function Navbar() {
               Search across our content
             </DialogDescription>
           </DialogHeader>
-          <div className="min-h-[400px]">
-            <script async src="https://cse.google.com/cse.js?cx=651d1b956c0ff4371"></script>
-            <div className="gcse-search"></div>
-          </div>
+          <script async="async" src="https://cse.google.com/cse.js?cx=651d1b956c0ff4371"></script>
+          <div class="gcse-search"></div>
         </DialogContent>
       </Dialog>
     </header>
