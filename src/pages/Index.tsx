@@ -118,8 +118,8 @@ const Index = () => {
     <>
       <Navbar />
       <div className="min-h-screen bg-background transition-colors duration-300 pt-16">
-        <div className="container max-w-4xl py-12 space-y-8">
-          <div className="text-center space-y-4">
+        <div className="container max-w-7xl py-12">
+          <div className="text-center space-y-4 mb-8">
             <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
               Image Analysis AI
             </h1>
@@ -128,7 +128,7 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 mb-8">
             <div className="space-y-2">
               <label htmlFor="apiKey" className="text-sm font-medium">
                 Gemini API Key
@@ -152,26 +152,31 @@ const Index = () => {
             </div>
           </div>
 
-          <ImageUpload onImageSelect={handleImageSelect} isLoading={isLoading} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-8">
+              <ImageUpload onImageSelect={handleImageSelect} isLoading={isLoading} />
+              <div className="flex justify-center">
+                <Button
+                  onClick={handleGenerate}
+                  disabled={!selectedImage || isLoading}
+                  className="w-full max-w-xs"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    "Generate Title & Keywords"
+                  )}
+                </Button>
+              </div>
+            </div>
 
-          <div className="flex justify-center">
-            <Button
-              onClick={handleGenerate}
-              disabled={!selectedImage || isLoading}
-              className="w-full max-w-xs"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                "Generate Title & Keywords"
-              )}
-            </Button>
+            <div className="h-full">
+              {results && <Results title={results.title} keywords={results.keywords} />}
+            </div>
           </div>
-
-          {results && <Results title={results.title} keywords={results.keywords} />}
         </div>
       </div>
     </>
