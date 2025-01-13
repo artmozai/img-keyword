@@ -128,30 +128,6 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="space-y-4 mb-8">
-            <div className="space-y-2">
-              <label htmlFor="apiKey" className="text-sm font-medium">
-                Gemini API Key
-              </label>
-              <Input
-                id="apiKey"
-                type="password"
-                value={apiKey}
-                onChange={handleApiKeyChange}
-                placeholder="Enter your Gemini API key"
-                className="w-full"
-              />
-              <a
-                href="https://aistudio.google.com/apikey"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-primary hover:underline block mt-1"
-              >
-                Get your Gemini API key here
-              </a>
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="space-y-8">
               <ImageUpload onImageSelect={handleImageSelect} isLoading={isLoading} />
@@ -173,7 +149,30 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="h-full">
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label htmlFor="apiKey" className="text-sm font-medium">
+                    Gemini API Key
+                  </label>
+                  <Input
+                    id="apiKey"
+                    type="password"
+                    value={apiKey}
+                    onChange={handleApiKeyChange}
+                    placeholder="Enter your Gemini API key"
+                    className="w-full"
+                  />
+                  <a
+                    href="https://aistudio.google.com/apikey"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-primary hover:underline block mt-1"
+                  >
+                    Get your Gemini API key here
+                  </a>
+                </div>
+              </div>
               {results && <Results title={results.title} keywords={results.keywords} />}
             </div>
           </div>
