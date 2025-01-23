@@ -16,7 +16,9 @@ export default defineConfig({
     },
   },
   define: {
-    'VITE_APP_TITLE': JSON.stringify(config.seo.title),
-    'VITE_APP_DESCRIPTION': JSON.stringify(config.seo.description)
+    'process.env': {
+      VITE_APP_TITLE: JSON.stringify(config.seo.title),
+      VITE_APP_DESCRIPTION: JSON.stringify(config.seo.description)
+    }
   }
 })

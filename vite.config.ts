@@ -5,6 +5,9 @@ import config from './src/config.json'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    port: 8080
+  },
   plugins: [react()],
   resolve: {
     alias: {
@@ -12,7 +15,9 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env.VITE_APP_TITLE': JSON.stringify(config.seo.title),
-    'process.env.VITE_APP_DESCRIPTION': JSON.stringify(config.seo.description)
+    'process.env': {
+      VITE_APP_TITLE: JSON.stringify(config.seo.title),
+      VITE_APP_DESCRIPTION: JSON.stringify(config.seo.description)
+    }
   }
 })
