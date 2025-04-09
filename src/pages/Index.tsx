@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { ImageUpload } from "@/components/ImageUpload";
 import { Results } from "@/components/Results";
@@ -77,31 +78,54 @@ const Index = () => {
         },
       ];
 
-      // Generate content from the image
+      // Generate content from the image with structured JSON format
       const result = await model.generateContent([
-        "Analyze this image and provide: 1. A descriptive title (about 10-15 words) 2. Generate exactly 50 relevant keywords or short phrases, separated by commas. Focus on visual elements, mood, style, and subject matter.",
+        "Analyze this image and generate:\n1. A descriptive title (about 10-15 words).\n2. Generate exactly 50 relevant keywords or short phrases, Focus on visual elements, mood, style, and subject matter.\n\nRespond in the following JSON format:\n{\n  \"title\": \"Your 15-word title here\",\n \"keywords\": [\"keyword1\", \"keyword2\", ..., \"keyword50\"]\n}",
         ...imageParts,
       ]);
       const response = await result.response;
       const text = response.text();
 
-      // Parse the response
-      const [title, keywordsText] = text.split("\n\n");
-      const cleanTitle = title
-        .replace(/^(Title:|1\.|[0-9]\.)\s*/i, "")
-        .replace(/\*\*/g, "")
-        .trim();
-      const keywords = keywordsText
-        .replace(/^(Keywords:|2\.|[0-9]\.)\s*/i, "")
-        .split(",")
-        .map((k) => k.trim())
-        .filter((k) => k)
-        .slice(0, 50);
+      // Parse the JSON response
+      try {
+        // Extract JSON from the response text
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+          throw new Error("Could not find JSON in response");
+        }
+        
+        const jsonString = jsonMatch[0];
+        const parsedData = JSON.parse(jsonString);
+        
+        if (!parsedData.title || !Array.isArray(parsedData.keywords)) {
+          throw new Error("Invalid JSON structure");
+        }
+        
+        setResults({
+          title: parsedData.title,
+          keywords: parsedData.keywords.slice(0, 50),
+        });
+      } catch (parseError) {
+        console.error("Error parsing JSON response:", parseError);
+        
+        // Fallback to original parsing method if JSON parsing fails
+        const [title, keywordsText] = text.split("\n\n");
+        const cleanTitle = title
+          .replace(/^(Title:|1\.|[0-9]\.)\s*/i, "")
+          .replace(/\*\*/g, "")
+          .trim();
+        const keywords = keywordsText
+          .replace(/^(Keywords:|2\.|[0-9]\.)\s*/i, "")
+          .split(",")
+          .map((k) => k.trim())
+          .filter((k) => k)
+          .slice(0, 50);
 
-      setResults({
-        title: cleanTitle,
-        keywords: keywords,
-      });
+        setResults({
+          title: cleanTitle,
+          keywords: keywords,
+        });
+      }
     } catch (error) {
       console.error("Error generating results:", error);
       toast({
