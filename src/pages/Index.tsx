@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { ImageUpload } from "@/components/ImageUpload";
 import { Results } from "@/components/Results";
@@ -80,7 +79,7 @@ const Index = () => {
 
       // Generate content from the image with structured JSON format
       const result = await model.generateContent([
-        "Analyze this image and generate:\n1. A descriptive title (about 10-15 words).\n2. Generate exactly 50 relevant keywords or short phrases, Focus on visual elements, mood, style, and subject matter.\n\nRespond in the following JSON format:\n{\n  \"title\": \"Your 15-word title here\",\n \"keywords\": [\"keyword1\", \"keyword2\", ..., \"keyword50\"]\n}",
+        "You are a stock content analyst for a leading microstock platform. Analyze this image and generate:\n\n1. A descriptive, SEO-friendly title (10–15 words), written in natural language, optimized for search engines. Include subject, action, setting, and context if visible.\n2. Exactly 50 high-quality keywords or short phrases. Include:\n   - Subject identity (e.g., gender, profession, ethnicity if clear)\n   - Actions, poses, or expressions\n   - Visual style (photo realism, flat lay, vector, minimalistic, etc.)\n   - Mood or emotion\n   - Setting or environment\n   - Technical elements (e.g., close-up, aerial view, backlit)\n   - Commercial use case (e.g., advertisement, website banner, brochure, etc.)\n\nRespond only in the following JSON format:\n\n{\n  \"title\": \"Your SEO-optimized title here\",\n  \"keywords\": [\"keyword1\", \"keyword2\", ..., \"keyword50\"]\n}",
         ...imageParts,
       ]);
       const response = await result.response;
