@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { ImageUpload } from "@/components/ImageUpload";
 import { Results } from "@/components/Results";
@@ -7,11 +8,13 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Navbar } from "@/components/Navbar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Index = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState("");
+  const [selectedModel, setSelectedModel] = useState("gemini-1.5-flash-latest");
   const [results, setResults] = useState<{
     title: string;
     keywords: string[];
@@ -23,12 +26,22 @@ const Index = () => {
     if (savedApiKey) {
       setApiKey(savedApiKey);
     }
+    
+    const savedModel = localStorage.getItem("GEMINI_MODEL");
+    if (savedModel) {
+      setSelectedModel(savedModel);
+    }
   }, []);
 
   const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newApiKey = e.target.value;
     setApiKey(newApiKey);
     localStorage.setItem("GEMINI_API_KEY", newApiKey);
+  };
+
+  const handleModelChange = (value: string) => {
+    setSelectedModel(value);
+    localStorage.setItem("GEMINI_MODEL", value);
   };
 
   const handleImageSelect = (file: File) => {
@@ -58,7 +71,7 @@ const Index = () => {
     setIsLoading(true);
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+      const model = genAI.getGenerativeModel({ model: selectedModel });
 
       // Convert image to base64
       const imageData = await new Promise<string>((resolve) => {
@@ -194,6 +207,21 @@ const Index = () => {
                   >
                     Get your Gemini API key here
                   </a>
+                  
+                  <div className="pt-4">
+                    <label htmlFor="modelSelect" className="text-sm font-medium block mb-2">
+                      Gemini Model
+                    </label>
+                    <Select value={selectedModel} onValueChange={handleModelChange}>
+                      <SelectTrigger id="modelSelect" className="w-full">
+                        <SelectValue placeholder="Select model" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="gemini-1.5-flash-latest">gemini-1.5-flash-latest</SelectItem>
+                        <SelectItem value="gemini-2.0-flash">gemini-2.0-flash</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </div>
               {results && <Results title={results.title} keywords={results.keywords} />}
