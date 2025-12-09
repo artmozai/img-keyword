@@ -36,20 +36,12 @@ export function Navbar() {
               Beranda
             </Link>
             <a
-              href="https://artmozai.blogspot.com"
+              href="https://www.artmozai.qzz.io"
               target="_blank"
               rel="noopener noreferrer"
               className="font-medium"
             >
               Blog
-            </a>
-            <a
-              href="https://artmozai.hashnode.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium"
-            >
-              Hashnode
             </a>
             <a
               href="https://stock.adobe.com/uk/contributor/211463521/artmozai"
