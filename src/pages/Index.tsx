@@ -9,12 +9,13 @@ import { Loader2 } from "lucide-react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Navbar } from "@/components/Navbar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { GEMINI_MODELS, DEFAULT_GEMINI_MODEL } from "@/lib/gemini-models";
 
 const Index = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState("");
-  const [selectedModel, setSelectedModel] = useState("gemini-1.5-flash-latest");
+  const [selectedModel, setSelectedModel] = useState(DEFAULT_GEMINI_MODEL);
   const [results, setResults] = useState<{
     title: string;
     keywords: string[];
@@ -217,8 +218,14 @@ const Index = () => {
                         <SelectValue placeholder="Select model" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="gemini-1.5-flash-latest">gemini-1.5-flash-latest</SelectItem>
-                        <SelectItem value="gemini-2.0-flash">gemini-2.0-flash</SelectItem>
+                        {GEMINI_MODELS.map((model) => (
+                          <SelectItem key={model.value} value={model.value}>
+                            <div className="flex flex-col">
+                              <span>{model.label}</span>
+                              <span className="text-xs text-muted-foreground">{model.description}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
