@@ -20,7 +20,7 @@ export function Navbar() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      const searchUrl = `https://artmozai.blogspot.com/search?q=${encodeURIComponent(searchQuery)}`;
+      const searchUrl = `https://www.artmozai.qzz.io/search?q=${encodeURIComponent(searchQuery)}`;
       window.open(searchUrl, '_blank');
       setIsSearchOpen(false);
       setSearchQuery("");
